@@ -14,7 +14,7 @@ public class GroupDao {
     private static final String DB_URL = "jdbc:postgresql://localhost:5432/university";
     private static final String DB_USER = "user_university";
     private static final String DB_PASSWORD = "1234";
-
+    
     public void addRows(Set<Group> groups) {
 
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
@@ -26,19 +26,18 @@ public class GroupDao {
                 statement.executeUpdate(sql);
             }
         } catch (Exception ex) {
-            System.out.println("Writing Groups to the table failed...");
+            System.out.println("GroupDao.addSetRows failed...");
             System.out.println(ex);
         }
     }
 
-    public Set<Group> searchGroups(int sumStudents) {
+    public Set<Group> showGroupsByStudentCount(int sumStudents) {
         Set<Group> groups = new HashSet<>();
         StringJoiner sql = new StringJoiner(" ");
-        sql.add("SELECT groups.group_name, count(students.group_id) AS sum_students");
+        sql.add("SELECT group_name");
         sql.add("FROM students INNER JOIN groups ON (students.group_id = groups.group_id)");
         sql.add("GROUP BY group_name");
         sql.add("HAVING count(students.group_id) < " + sumStudents);
-        sql.add("ORDER BY sum_students");
 
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
                 Statement statement = connection.createStatement();
@@ -49,7 +48,7 @@ public class GroupDao {
                 groups.add(new Group(groupName));
             }
         } catch (Exception ex) {
-            System.out.println("Group Search failed...");
+            System.out.println("GroupDao.findGroupsByStudentCount failed...");
             System.out.println(ex);
         }
         return groups;

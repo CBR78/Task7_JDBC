@@ -27,7 +27,7 @@ public class TableReCreatorDao {
                 statement.execute(line);
             }
         } catch (Exception ex) {
-            System.out.println("Tables re-create failed...");
+            System.out.println("TableReCreatorDao.reCreateTable failed...");
             System.out.println(ex);
         }
     }

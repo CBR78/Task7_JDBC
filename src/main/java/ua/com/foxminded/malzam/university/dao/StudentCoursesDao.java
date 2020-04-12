@@ -10,37 +10,43 @@ import java.util.StringJoiner;
 
 import ua.com.foxminded.malzam.university.model.Course;
 import ua.com.foxminded.malzam.university.model.Student;
-import ua.com.foxminded.malzam.university.model.StudentAndCourse;
+import ua.com.foxminded.malzam.university.model.StudentCourses;
 
-public class StudentAndCourseDao {
+public class StudentCoursesDao {
     private static final String DB_URL = "jdbc:postgresql://localhost:5432/university";
     private static final String DB_USER = "user_university";
     private static final String DB_PASSWORD = "1234";
 
-    public void addRows(Set<StudentAndCourse> studentsAndCourses) {
+    public void addOneRow(int studentId, int courseId) {
+        Set<StudentCourses> studentCourses = new HashSet<>();
+        studentCourses.add(new StudentCourses(studentId, courseId));
+        addRows(studentCourses);
+    }
+
+    public void addRows(Set<StudentCourses> studentCourses) {
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
                 Statement statement = connection.createStatement()) {
 
-            for (StudentAndCourse studentAndCourse : studentsAndCourses) {
-                int studentId = studentAndCourse.getStudentId();
-                int courseId = studentAndCourse.getCourseId();
-                String sql = "INSERT INTO students_and_courses (student_id, course_id) VALUES ("
+            for (StudentCourses studentCourse : studentCourses) {
+                int studentId = studentCourse.getStudentId();
+                int courseId = studentCourse.getCourseId();
+                String sql = "INSERT INTO student_courses (student_id, course_id) VALUES ("
                         + studentId + ", " + courseId + ")";
                 statement.executeUpdate(sql);
             }
         } catch (Exception ex) {
-            System.out.println("Writing StudentsAndCourses to the table failed...");
+            System.out.println("StudentCoursesDao.addRows failed...");
             System.out.println(ex);
         }
     }
 
-    public Set<Student> showCourseStudents(String courseName) {
+    public Set<Student> showStudentsByCourseName(String courseName) {
         Set<Student> students = new HashSet<>();
         StringJoiner sql = new StringJoiner(" ");
-        sql.add("SELECT first_name, last_name, course_name, course_description");
-        sql.add("FROM students_and_courses");
-        sql.add("INNER JOIN students ON (students_and_courses.student_id = students.student_id)");
-        sql.add("INNER JOIN courses ON (students_and_courses.course_id = courses.course_id)");
+        sql.add("SELECT first_name, last_name");
+        sql.add("FROM student_courses");
+        sql.add("INNER JOIN students ON (student_courses.student_id = students.student_id)");
+        sql.add("INNER JOIN courses ON (student_courses.course_id = courses.course_id)");
         sql.add("WHERE course_name = '" + courseName + "'");
 
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
@@ -53,20 +59,19 @@ public class StudentAndCourseDao {
                 students.add(new Student(firstName, lastName));
             }
         } catch (Exception ex) {
-            System.out.println("Group Search failed...");
+            System.out.println("StudentCoursesDao.showStudentsByCourseName failed...");
             System.out.println(ex);
         }
         return students;
     }
 
-    public Set<Course> showStudentCourses(int studentId) {
+    public Set<Course> showCoursesByStudentId(int studentId) {
         Set<Course> courses = new HashSet<>();
         StringJoiner sql = new StringJoiner(" ");
-        sql.add("SELECT first_name, last_name, course_name, course_description");
-        sql.add("FROM students_and_courses");
-        sql.add("INNER JOIN students ON (students_and_courses.student_id = students.student_id)");
-        sql.add("INNER JOIN courses ON (students_and_courses.course_id = courses.course_id)");
-        sql.add("WHERE student_id = '" + studentId + "'");
+        sql.add("SELECT course_name, course_description, courses.course_id");
+        sql.add("FROM student_courses");
+        sql.add("INNER JOIN courses ON (student_courses.course_id = courses.course_id)");
+        sql.add("WHERE student_id = " + studentId);
 
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
                 Statement statement = connection.createStatement();
@@ -75,25 +80,25 @@ public class StudentAndCourseDao {
             while (rs.next()) {
                 String courseName = rs.getString("course_name");
                 String courseDescription = rs.getString("course_description");
-                courses.add(new Course(courseName, courseDescription));
+                int courseId = rs.getInt("course_id");
+                courses.add(new Course(courseName, courseDescription, courseId));
             }
         } catch (Exception ex) {
-            System.out.println("Group Search failed...");
+            System.out.println("StudentCoursesDao.showCoursesByStudentId failed...");
             System.out.println(ex);
         }
         return courses;
     }
 
-    public void removestudentAndCourse(int studentId, int course_id) {
+    public void deleteRow(int studentId, int courseId) {
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
                 Statement statement = connection.createStatement()) {
 
-            String sql = "DELETE FROM students_and_courses WHERE student_id = " + studentId
-                    + " course_id = " + course_id;
+            String sql = "DELETE FROM student_courses WHERE student_id = " + studentId
+                    + " AND course_id = " + courseId;
             statement.executeUpdate(sql);
-
         } catch (Exception ex) {
-            System.out.println("Removing student failed...");
+            System.out.println("StudentCoursesDao.deleteOneRow failed...");
             System.out.println(ex);
         }
     }

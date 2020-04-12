@@ -6,15 +6,22 @@ public class Student {
 
     private final String firstName;
     private final String lastName;
+    private int studentId;
     private int groupId;
 
     public Student(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
     }
+    
+    public Student(String firstName, String lastName, int studentId) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.studentId = studentId;
+    }
 
-    public void setGroupId(int groupId) {
-        this.groupId = groupId;
+    public int getStudentId() {
+        return studentId;
     }
 
     public String getFirstName() {
@@ -25,13 +32,17 @@ public class Student {
         return lastName;
     }
 
+    public void setGroupId(int groupId) {
+        this.groupId = groupId;
+    }
+
     public int getGroupId() {
         return groupId;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(firstName, groupId, lastName);
+        return Objects.hash(firstName, groupId, lastName, studentId);
     }
 
     @Override
@@ -44,12 +55,12 @@ public class Student {
             return false;
         Student other = (Student) obj;
         return Objects.equals(firstName, other.firstName) && groupId == other.groupId
-                && Objects.equals(lastName, other.lastName);
+                && Objects.equals(lastName, other.lastName) && studentId == other.studentId;
     }
 
     @Override
     public String toString() {
-        return "Student [firstName=" + firstName + ", lastName=" + lastName + ", groupId=" + groupId
-                + "]";
+        return "Student [firstName=" + firstName + ", lastName=" + lastName + ", studentId=" + studentId
+                + ", groupId=" + groupId + "]";
     }
 }

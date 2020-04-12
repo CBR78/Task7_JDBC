@@ -6,23 +6,24 @@ import java.util.Set;
 
 import ua.com.foxminded.malzam.university.dao.CourseDao;
 import ua.com.foxminded.malzam.university.dao.GroupDao;
-import ua.com.foxminded.malzam.university.dao.StudentAndCourseDao;
+import ua.com.foxminded.malzam.university.dao.StudentCoursesDao;
 import ua.com.foxminded.malzam.university.dao.StudentDao;
 import ua.com.foxminded.malzam.university.model.Course;
 import ua.com.foxminded.malzam.university.model.Group;
 import ua.com.foxminded.malzam.university.model.Student;
-import ua.com.foxminded.malzam.university.model.StudentAndCourse;
+import ua.com.foxminded.malzam.university.model.StudentCourses;
 
 public class DataTableGeneator {
     private static final int SUM_STUDENTS = 200;
     private static final int SUM_GROUPS = 10;
     private static final int SUM_COURSES = 10;
+    private Random random = new Random();
 
     public void generateData() {
         CourseDao courseDao = new CourseDao();
         GroupDao groupDao = new GroupDao();
         StudentDao studentDao = new StudentDao();
-        StudentAndCourseDao studentAndCourseDao = new StudentAndCourseDao();
+        StudentCoursesDao studentAndCourseDao = new StudentCoursesDao();
 
         courseDao.addRows(createCourses());
         groupDao.addRows(generateGroups());
@@ -50,15 +51,14 @@ public class DataTableGeneator {
         final int ASCII_CODE_Z = 90;
         final int ASCII_TARGET_SET = ASCII_CODE_Z - ASCII_CODE_A + 1;
         Set<Group> groups = new HashSet<>();
-        Random random = new Random();
-
+        
         for (int i = 0; i < SUM_GROUPS; i++) {
             StringBuilder groupName = new StringBuilder();
-            groupName.appendCodePoint(ASCII_CODE_A + random.nextInt(ASCII_TARGET_SET));
-            groupName.appendCodePoint(ASCII_CODE_A + random.nextInt(ASCII_TARGET_SET));
+            groupName.appendCodePoint(ASCII_CODE_A + this.random.nextInt(ASCII_TARGET_SET));
+            groupName.appendCodePoint(ASCII_CODE_A + this.random.nextInt(ASCII_TARGET_SET));
             groupName.append("-");
-            groupName.append(random.nextInt(10));
-            groupName.append(random.nextInt(10));
+            groupName.append(this.random.nextInt(10));
+            groupName.append(this.random.nextInt(10));
             groups.add(new Group(groupName.toString()));
         }
         return groups;
@@ -116,8 +116,7 @@ public class DataTableGeneator {
         int studentsWithoutGroups = SUM_STUDENTS;
         int groupId = 0;
         int studentsForGrouping = 0;
-        Random random = new Random();
-
+        
         for (Student student : students) {
             if (studentsWithoutGroups >= 10 && studentsForGrouping == 0) {
                 studentsForGrouping = 10 + random.nextInt(21);
@@ -133,12 +132,11 @@ public class DataTableGeneator {
         return students;
     }
 
-    private Set<StudentAndCourse> generateStudentsAndCourses() {
+    private Set<StudentCourses> generateStudentsAndCourses() {
         int sumCoursesForStudent = 0;
         int courseId = 0;
-        Set<StudentAndCourse> studentsAndCourses = new HashSet<>();
-        Random random = new Random();
-
+        Set<StudentCourses> studentsAndCourses = new HashSet<>();
+        
         for (int studentId = 1; studentId <= SUM_STUDENTS; studentId++) {
             sumCoursesForStudent = 1 + random.nextInt(3);
             for (; sumCoursesForStudent > 0; sumCoursesForStudent--) {
@@ -146,7 +144,7 @@ public class DataTableGeneator {
                 if (courseId > SUM_COURSES) {
                     courseId = 1;
                 }
-                studentsAndCourses.add(new StudentAndCourse(studentId, courseId));
+                studentsAndCourses.add(new StudentCourses(studentId, courseId));
             }
         }
         return studentsAndCourses;

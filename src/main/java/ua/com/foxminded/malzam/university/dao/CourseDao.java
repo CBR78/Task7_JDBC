@@ -13,7 +13,7 @@ public class CourseDao {
     private static final String DB_URL = "jdbc:postgresql://localhost:5432/university";
     private static final String DB_USER = "user_university";
     private static final String DB_PASSWORD = "1234";
-
+    
     public void addRows(Set<Course> courses) {
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
                 Statement statement = connection.createStatement()) {
@@ -26,14 +26,14 @@ public class CourseDao {
                 statement.executeUpdate(sql);
             }
         } catch (Exception ex) {
-            System.out.println("Writing Сourses to the table failed...");
+            System.out.println("CourseDao.addRows failed...");
             System.out.println(ex);
         }
     }
 
-    public Set<Course> showAllRows() {
+    public Set<Course> showRowsAll() {
         Set<Course> courses = new HashSet<>();
-        String sql = "SELECT course_name, course_description FROM courses";
+        String sql = "SELECT course_name, course_description, course_id FROM courses";
 
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
                 Statement statement = connection.createStatement();
@@ -42,11 +42,12 @@ public class CourseDao {
             while (rs.next()) {
                 String courseName = rs.getString("course_name");
                 String courseDescription = rs.getString("course_description");
-                courses.add(new Course(courseName, courseDescription));
+                int courseId = rs.getInt("course_id");
+                courses.add(new Course(courseName, courseDescription, courseId));
             }
 
         } catch (Exception ex) {
-            System.out.println("Showing all Сourses failed...");
+            System.out.println("CourseDao.showAllRows failed...");
             System.out.println(ex);
         }
         return courses;

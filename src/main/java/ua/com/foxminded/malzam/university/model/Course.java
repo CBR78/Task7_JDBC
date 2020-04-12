@@ -5,10 +5,17 @@ import java.util.Objects;
 public class Course {
     private final String courseName;
     private final String courseDescription;
-    
+    private int courseId;
+
     public Course(String courseName, String courseDescription) {
         this.courseName = courseName;
-        this.courseDescription = courseDescription;        
+        this.courseDescription = courseDescription;
+    }
+
+    public Course(String courseName, String courseDescription, int courseId) {
+        this.courseName = courseName;
+        this.courseDescription = courseDescription;
+        this.courseId = courseId;
     }
 
     public String getCourseName() {
@@ -19,9 +26,13 @@ public class Course {
         return courseDescription;
     }
 
+    public int getCourseId() {
+        return courseId;
+    }
+
     @Override
     public int hashCode() {
-        return Objects.hash(courseDescription, courseName);
+        return Objects.hash(courseDescription, courseName, courseId);
     }
 
     @Override
@@ -34,11 +45,12 @@ public class Course {
             return false;
         Course other = (Course) obj;
         return Objects.equals(courseDescription, other.courseDescription)
-                && Objects.equals(courseName, other.courseName);
+                && Objects.equals(courseName, other.courseName) && courseId == other.courseId;
     }
 
     @Override
     public String toString() {
-        return "Course [courseName=" + courseName + ", courseDescription=" + courseDescription + "]";
+        return "Course [courseName=" + courseName + ", courseDescription=" + courseDescription
+                + ", courseId=" + courseId + "]";
     }
 }

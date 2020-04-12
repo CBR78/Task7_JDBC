@@ -2,12 +2,12 @@ package ua.com.foxminded.malzam.university.model;
 
 import java.util.Objects;
 
-public class StudentAndCourse {
+public class StudentCourses {
 
     private final int studentId;
     private final int courseId;
 
-    public StudentAndCourse(int studentId, int courseId) {
+    public StudentCourses(int studentId, int courseId) {
         this.studentId = studentId;
         this.courseId = courseId;
     }
@@ -33,7 +33,7 @@ public class StudentAndCourse {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        StudentAndCourse other = (StudentAndCourse) obj;
+        StudentCourses other = (StudentCourses) obj;
         return courseId == other.courseId && studentId == other.studentId;
     }
 
