@@ -2,11 +2,10 @@ package ua.com.foxminded.malzam.university.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.StringJoiner;
 
 import ua.com.foxminded.malzam.university.model.Group;
 
@@ -14,16 +13,18 @@ public class GroupDao {
     private static final String DB_URL = "jdbc:postgresql://localhost:5432/university";
     private static final String DB_USER = "user_university";
     private static final String DB_PASSWORD = "1234";
-    
+    private static final String SQL_ADD_ROWS = "INSERT INTO groups (group_name) VALUES ('?')";
+    private static final String SQL_SHOW_GROUPS_BU_STUDENT_COUNT = "SELECT group_name FROM students INNER JOIN groups ON (students.group_id = groups.group_id) GROUP BY group_name HAVING count(students.group_id) < ?";
+
     public void addRows(Set<Group> groups) {
 
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-                Statement statement = connection.createStatement()) {
+                PreparedStatement preparedStatement = connection.prepareStatement(SQL_ADD_ROWS)) {
 
             for (Group group : groups) {
                 String groupName = group.getGroupName();
-                String sql = "INSERT INTO groups (group_name) VALUES ('" + groupName + "')";
-                statement.executeUpdate(sql);
+                preparedStatement.setString(1, groupName);
+                preparedStatement.execute();
             }
         } catch (Exception ex) {
             System.out.println("GroupDao.addSetRows failed...");
@@ -31,21 +32,19 @@ public class GroupDao {
         }
     }
 
-    public Set<Group> showGroupsByStudentCount(int sumStudents) {
+    public Set<Group> showGroupsByStudentCount(int sumStudents) { // - preparedStatement
         Set<Group> groups = new HashSet<>();
-        StringJoiner sql = new StringJoiner(" ");
-        sql.add("SELECT group_name");
-        sql.add("FROM students INNER JOIN groups ON (students.group_id = groups.group_id)");
-        sql.add("GROUP BY group_name");
-        sql.add("HAVING count(students.group_id) < " + sumStudents);
 
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-                Statement statement = connection.createStatement();
-                ResultSet rs = statement.executeQuery(sql.toString())) {
+                PreparedStatement preparedStatement = connection
+                        .prepareStatement(SQL_SHOW_GROUPS_BU_STUDENT_COUNT)) {
 
-            while (rs.next()) {
-                String groupName = rs.getString("group_name");
-                groups.add(new Group(groupName));
+            preparedStatement.setInt(1, sumStudents);
+            try (ResultSet rs = preparedStatement.executeQuery()) {
+                while (rs.next()) {
+                    String groupName = rs.getString("group_name");
+                    groups.add(new Group(groupName));
+                }
             }
         } catch (Exception ex) {
             System.out.println("GroupDao.findGroupsByStudentCount failed...");

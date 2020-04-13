@@ -12,7 +12,7 @@ public class TableReCreatorDao {
     private static final String DB_URL = "jdbc:postgresql://localhost:5432/university";
     private static final String DB_USER = "user_university";
     private static final String DB_PASSWORD = "1234";
-    private static final String NAME_SCRIPT_FILE = "reCreateTable.sql";
+    private static final String NAME_SCRIPT_FILE = "createtable.sql";
 
     public void reCreateTable() {
         ClassLoader loader = getClass().getClassLoader();

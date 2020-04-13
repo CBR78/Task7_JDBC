@@ -3,7 +3,6 @@ package ua.com.foxminded.malzam.university.model;
 import java.util.Objects;
 
 public class StudentCourses {
-
     private final int studentId;
     private final int courseId;
 

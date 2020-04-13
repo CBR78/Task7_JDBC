@@ -2,6 +2,7 @@ package ua.com.foxminded.malzam.university.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.HashSet;
@@ -13,17 +14,19 @@ public class CourseDao {
     private static final String DB_URL = "jdbc:postgresql://localhost:5432/university";
     private static final String DB_USER = "user_university";
     private static final String DB_PASSWORD = "1234";
-    
+    private static final String SQL_ADD_ROWS = "INSERT INTO courses (course_name, course_description) VALUES ('?','?')";
+    private static final String SQL_SHOW_ROWS_ALL = "SELECT course_name, course_description, course_id FROM courses";
+
     public void addRows(Set<Course> courses) {
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-                Statement statement = connection.createStatement()) {
+                PreparedStatement preparedStatement = connection.prepareStatement(SQL_ADD_ROWS)) {
 
             for (Course course : courses) {
                 String courseName = course.getCourseName();
                 String courseDescription = course.getCourseDescription();
-                String sql = "INSERT INTO courses (course_name, course_description) VALUES ('"
-                        + courseName + "', '" + courseDescription + "')";
-                statement.executeUpdate(sql);
+                preparedStatement.setString(1, courseName);
+                preparedStatement.setString(2, courseDescription);
+                preparedStatement.execute();
             }
         } catch (Exception ex) {
             System.out.println("CourseDao.addRows failed...");
@@ -33,11 +36,10 @@ public class CourseDao {
 
     public Set<Course> showRowsAll() {
         Set<Course> courses = new HashSet<>();
-        String sql = "SELECT course_name, course_description, course_id FROM courses";
 
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
                 Statement statement = connection.createStatement();
-                ResultSet rs = statement.executeQuery(sql)) {
+                ResultSet rs = statement.executeQuery(SQL_SHOW_ROWS_ALL)) {
 
             while (rs.next()) {
                 String courseName = rs.getString("course_name");
@@ -45,7 +47,6 @@ public class CourseDao {
                 int courseId = rs.getInt("course_id");
                 courses.add(new Course(courseName, courseDescription, courseId));
             }
-
         } catch (Exception ex) {
             System.out.println("CourseDao.showAllRows failed...");
             System.out.println(ex);
