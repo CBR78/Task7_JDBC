@@ -3,36 +3,36 @@ package ua.com.foxminded.malzam.university.model;
 import java.util.Objects;
 
 public class Course {
-    private final String courseName;
-    private final String courseDescription;
-    private int courseId;
+    private int id;
+    private final String name;
+    private final String description;
 
-    public Course(String courseName, String courseDescription) {
-        this.courseName = courseName;
-        this.courseDescription = courseDescription;
+    public Course(String name, String description) {
+        this.name = name;
+        this.description = description;
     }
 
-    public Course(String courseName, String courseDescription, int courseId) {
-        this.courseName = courseName;
-        this.courseDescription = courseDescription;
-        this.courseId = courseId;
+    public Course(int id, String name, String description) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
     }
 
-    public String getCourseName() {
-        return courseName;
+    public String getName() {
+        return name;
     }
 
-    public String getCourseDescription() {
-        return courseDescription;
+    public String getDescription() {
+        return description;
     }
 
-    public int getCourseId() {
-        return courseId;
+    public int getId() {
+        return id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(courseDescription, courseName, courseId);
+        return Objects.hash(description, name, id);
     }
 
     @Override
@@ -44,13 +44,13 @@ public class Course {
         if (getClass() != obj.getClass())
             return false;
         Course other = (Course) obj;
-        return Objects.equals(courseDescription, other.courseDescription)
-                && Objects.equals(courseName, other.courseName) && courseId == other.courseId;
+        return Objects.equals(description, other.description)
+                && Objects.equals(name, other.name) && id == other.id;
     }
 
     @Override
     public String toString() {
-        return "Course [courseName=" + courseName + ", courseDescription=" + courseDescription
-                + ", courseId=" + courseId + "]";
+        return "Course [courseName=" + name + ", courseDescription=" + description
+                + ", courseId=" + id + "]";
     }
 }

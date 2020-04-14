@@ -3,24 +3,25 @@ package ua.com.foxminded.malzam.university.model;
 import java.util.Objects;
 
 public class Student {
+    private int id;
     private final String firstName;
     private final String lastName;
-    private int studentId;
     private int groupId;
 
     public Student(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
     }
-    
-    public Student(String firstName, String lastName, int studentId) {
+
+    public Student(int studentId, String firstName, String lastName, int groupId) {
+        this.id = studentId;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.studentId = studentId;
+        this.groupId = groupId;
     }
 
-    public int getStudentId() {
-        return studentId;
+    public int getId() {
+        return id;
     }
 
     public String getFirstName() {
@@ -41,7 +42,7 @@ public class Student {
 
     @Override
     public int hashCode() {
-        return Objects.hash(firstName, groupId, lastName, studentId);
+        return Objects.hash(firstName, groupId, lastName, id);
     }
 
     @Override
@@ -54,12 +55,12 @@ public class Student {
             return false;
         Student other = (Student) obj;
         return Objects.equals(firstName, other.firstName) && groupId == other.groupId
-                && Objects.equals(lastName, other.lastName) && studentId == other.studentId;
+                && Objects.equals(lastName, other.lastName) && id == other.id;
     }
 
     @Override
     public String toString() {
-        return "Student [firstName=" + firstName + ", lastName=" + lastName + ", studentId=" + studentId
+        return "Student [firstName=" + firstName + ", lastName=" + lastName + ", studentId=" + id
                 + ", groupId=" + groupId + "]";
     }
 }

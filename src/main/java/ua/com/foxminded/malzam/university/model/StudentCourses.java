@@ -6,16 +6,16 @@ public class StudentCourses {
     private final int studentId;
     private final int courseId;
 
-    public StudentCourses(int studentId, int courseId) {
+    public StudentCourses(int studentId, int courseId) { //DataTableGeneator.generateStudentsAndCourses
         this.studentId = studentId;
         this.courseId = courseId;
     }
 
-    public int getStudentId() {
+    public int getStudentId() { //DataTableLoader
         return studentId;
     }
 
-    public int getCourseId() {
+    public int getCourseId() { //DataTableLoader
         return courseId;
     }
 

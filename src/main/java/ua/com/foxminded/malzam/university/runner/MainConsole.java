@@ -2,12 +2,9 @@ package ua.com.foxminded.malzam.university.runner;
 
 import java.util.Scanner;
 
-import ua.com.foxminded.malzam.university.service.ReportMethods;
-
 public class MainConsole {
 
-    public void showMainMenu() {
-        Scanner in = new Scanner(System.in);
+    public void printMainMenu() {
         System.out.println("\n" + "Select function (a, b, c, d, e, f or x) and press Enter:");
         System.out.println("a. Find all groups with less or equals student count;");
         System.out.println("b. Find all students related to course with given name;");
@@ -16,68 +13,46 @@ public class MainConsole {
         System.out.println("e. Add a student to the course (from a list);");
         System.out.println("f. Remove the student from one of his or her courses;");
         System.out.println("x. Close the program.");
+
+        Scanner in = new Scanner(System.in);
         String selectedFunction = in.next();
         if (!selectedFunction.equals("x")) {
-            showFunctionMenu(in, selectedFunction);
+            printFunctionMenu(in, selectedFunction);
         }
         in.close();
     }
 
-    private void showFunctionMenu(Scanner in, String selectedFunction) {
-        ReportMethods reportMethods = new ReportMethods();
+    private void printFunctionMenu(Scanner in, String selectedFunction) {
+        GroupConsole groupConsole = new GroupConsole();
+        StudentConsole studentConsole = new StudentConsole();
 
         if (selectedFunction.equals("a")) {
-            System.out.println("\n" + "Enter the count of students:");
-            int studentCount = in.nextInt();
-            reportMethods.showGroupsByStudentCount(studentCount);
+            groupConsole.menuGroupsByStudentCount(in);
         }
 
         else if (selectedFunction.equals("b")) {
-            reportMethods.showCoursesAll();
-            System.out.println("\n" + "Enter course name:");
-            String courseName = in.next();
-            reportMethods.showStudentsByCourseName(courseName);
+            studentConsole.menuStudentsByCourseName(in);
         }
 
         else if (selectedFunction.equals("c")) {
-            System.out.println("Enter student firstname:");
-            String firstName = in.next();
-            System.out.println("Enter student lastname:");
-            String lastName = in.next();
-            reportMethods.addStudent(firstName, lastName);
+            studentConsole.menuAddStudent(in);
         }
 
         else if (selectedFunction.equals("d")) {
-            reportMethods.showStudentsAll();
-            System.out.println("\n" + "Enter STUDENT_ID to delete student:");
-            int studentId = in.nextInt();
-            reportMethods.deleteStudent(studentId);
+            studentConsole.menuDeleteStudent(in);
         }
 
         else if (selectedFunction.equals("e")) {
-            reportMethods.showStudentsAll();
-            System.out.println("\n" + "Enter STUDENT_ID to add the student to a course:");
-            int studentId = in.nextInt();
-            reportMethods.showStudentCourses(studentId);
-            reportMethods.showCoursesAllFromId();
-            System.out.println("\n" + "Enter COURSE_ID to add a student to it:");
-            int courseId = in.nextInt();
-            reportMethods.addStudentCourse(studentId, courseId);
-            reportMethods.showStudentCourses(studentId);
+            studentConsole.menuAddStudentToCourse(in);
         }
 
         else if (selectedFunction.equals("f")) {
-            reportMethods.showStudentsAll();
-            System.out.println("\n" + "Enter STUDENT_ID to remove the student from a course:");
-            int studentId = in.nextInt();
-            reportMethods.showStudentCourses(studentId);
-            System.out.println("\n" + "Enter COURSE_ID to remove a student from the course:");
-            int courseId = in.nextInt();
-            reportMethods.deleteStudentCourse(studentId, courseId);
-            reportMethods.showStudentCourses(studentId);
-        } else {
+            studentConsole.menuDeleteStudentCourse(in);
+        }
+
+        else {
             System.out.println("Invalid value entered");
         }
-        showMainMenu();
+        printMainMenu();
     }
 }

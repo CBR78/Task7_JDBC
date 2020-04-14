@@ -4,7 +4,6 @@ import java.util.Set;
 
 import ua.com.foxminded.malzam.university.dao.CourseDao;
 import ua.com.foxminded.malzam.university.dao.GroupDao;
-import ua.com.foxminded.malzam.university.dao.StudentCoursesDao;
 import ua.com.foxminded.malzam.university.dao.StudentDao;
 import ua.com.foxminded.malzam.university.model.Course;
 import ua.com.foxminded.malzam.university.model.Group;
@@ -14,15 +13,27 @@ import ua.com.foxminded.malzam.university.model.StudentCourses;
 public class DataTableLoader {
     public void loadGeneratedData() {
         DataTableGeneator dataTableGeneator = new DataTableGeneator();
-        
-        Set<Course> courses = dataTableGeneator.createCourses();
-        Set<Group> groups = dataTableGeneator.generateGroups();
-        Set<Student> students = dataTableGeneator.generateStudents();
-        Set<StudentCourses> studentsAndCourses = dataTableGeneator.generateStudentsAndCourses();
 
-        new CourseDao().addRows(courses);
-        new GroupDao().addRows(groups);
-        new StudentDao().addRows(students);
-        new StudentCoursesDao().addRows(studentsAndCourses);
+        Set<Student> students = dataTableGeneator.generateStudents();
+        for (Student student : students) {
+            new StudentDao().insert(student);
+        }
+
+        Set<Group> groups = dataTableGeneator.generateGroups();
+        for (Group group : groups) {
+            new GroupDao().insert(group);
+        }
+
+        Set<Course> courses = dataTableGeneator.createCourses();
+        for (Course course : courses) {
+            new CourseDao().insert(course);
+        }
+
+        Set<StudentCourses> studentCourses = dataTableGeneator.generateStudentsAndCourses();
+        for (StudentCourses studentCourse : studentCourses) {
+            int studentId = studentCourse.getStudentId(); 
+            int courseId = studentCourse.getCourseId();
+            new StudentDao().insertToCourse(studentId, courseId);
+        }
     }
 }
