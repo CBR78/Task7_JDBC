@@ -46,3 +46,5 @@ courses(
 Имейте в виду, что видеоролики были созданы для курса Java 6. Теперь мы используем Java 8+.  
 - Работа с Базами данных (DAO layer) в Java - https://youtu.be/bYyKQmYyGZg  
 - Разбор кода DAO Layer на Java - https://youtu.be/flMFICpPfcI  
+
+#### Результат - в текущей ветке dev
