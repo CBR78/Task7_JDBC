@@ -15,6 +15,7 @@ public class TableReCreator {
     public void reCreateTable() {
         ClassLoader loader = getClass().getClassLoader();
         URL urlScriptFile = loader.getResource(NAME_SCRIPT_FILE);
+        assert urlScriptFile != null;
         File scriptFile = new File(urlScriptFile.getFile());
 
         try (Connection connection = DBConnection.getInstance();

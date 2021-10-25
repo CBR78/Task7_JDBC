@@ -6,7 +6,7 @@ public class StudentCourses {
     private final int studentId;
     private final int courseId;
 
-    public StudentCourses(int studentId, int courseId) { //DataTableGeneator.generateStudentsAndCourses
+    public StudentCourses(int studentId, int courseId) { //DataTableGenerator.generateStudentsAndCourses
         this.studentId = studentId;
         this.courseId = courseId;
     }
@@ -38,6 +38,6 @@ public class StudentCourses {
 
     @Override
     public String toString() {
-        return "StudentAndCours [studentId=" + studentId + ", courseId=" + courseId + "]";
+        return "StudentAndCourse [studentId=" + studentId + ", courseId=" + courseId + "]";
     }
 }

@@ -12,26 +12,26 @@ import ua.com.foxminded.malzam.university.model.StudentCourses;
 
 public class DataTableLoader {
     public void loadGeneratedData() {
-        DataTableGeneator dataTableGeneator = new DataTableGeneator();
+        DataTableGenerator dataTableGenerator = new DataTableGenerator();
 
-        Set<Student> students = dataTableGeneator.generateStudents();
+        Set<Student> students = dataTableGenerator.generateStudents();
         for (Student student : students) {
             new StudentDao().insert(student);
         }
 
-        Set<Group> groups = dataTableGeneator.generateGroups();
+        Set<Group> groups = dataTableGenerator.generateGroups();
         for (Group group : groups) {
             new GroupDao().insert(group);
         }
 
-        Set<Course> courses = dataTableGeneator.createCourses();
+        Set<Course> courses = dataTableGenerator.createCourses();
         for (Course course : courses) {
             new CourseDao().insert(course);
         }
 
-        Set<StudentCourses> studentCourses = dataTableGeneator.generateStudentsAndCourses();
+        Set<StudentCourses> studentCourses = dataTableGenerator.generateStudentsAndCourses();
         for (StudentCourses studentCourse : studentCourses) {
-            int studentId = studentCourse.getStudentId(); 
+            int studentId = studentCourse.getStudentId();
             int courseId = studentCourse.getCourseId();
             new StudentDao().insertToCourse(studentId, courseId);
         }

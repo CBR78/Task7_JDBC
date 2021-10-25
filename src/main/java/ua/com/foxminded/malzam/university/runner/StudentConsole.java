@@ -5,7 +5,7 @@ import java.util.Scanner;
 import ua.com.foxminded.malzam.university.service.ReportFormatter;
 
 public class StudentConsole {
-    ReportFormatter reportFormatter = new ReportFormatter();
+    private final ReportFormatter reportFormatter = new ReportFormatter();
 
     public void menuStudentsByCourseName(Scanner in) {
         reportFormatter.printCoursesAll();
@@ -34,12 +34,12 @@ public class StudentConsole {
         System.out.println("\n" + "Enter STUDENT_ID to add the student to a course:");
         int studentId = in.nextInt();
         reportFormatter.printStudentAndHisCourses(studentId);
-        
+
         reportFormatter.printCoursesAll();
         System.out.println("\n" + "Enter COURSE_ID to add a student to it:");
         int courseId = in.nextInt();
         reportFormatter.printAddStudentToCourse(studentId, courseId);
-        
+
         reportFormatter.printStudentAndHisCourses(studentId);
     }
 
@@ -52,7 +52,7 @@ public class StudentConsole {
         System.out.println("\n" + "Enter COURSE_ID to remove a student from the course:");
         int courseId = in.nextInt();
         reportFormatter.printDeleteStudentCourse(studentId, courseId);
-        
+
         reportFormatter.printStudentAndHisCourses(studentId);
     }
 }

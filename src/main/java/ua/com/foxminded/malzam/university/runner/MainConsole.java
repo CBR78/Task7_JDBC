@@ -26,32 +26,28 @@ public class MainConsole {
         GroupConsole groupConsole = new GroupConsole();
         StudentConsole studentConsole = new StudentConsole();
 
-        if (selectedFunction.equals("a")) {
-            groupConsole.menuGroupsByStudentCount(in);
-        }
-
-        else if (selectedFunction.equals("b")) {
-            studentConsole.menuStudentsByCourseName(in);
-        }
-
-        else if (selectedFunction.equals("c")) {
-            studentConsole.menuAddStudent(in);
-        }
-
-        else if (selectedFunction.equals("d")) {
-            studentConsole.menuDeleteStudent(in);
-        }
-
-        else if (selectedFunction.equals("e")) {
-            studentConsole.menuAddStudentToCourse(in);
-        }
-
-        else if (selectedFunction.equals("f")) {
-            studentConsole.menuDeleteStudentCourse(in);
-        }
-
-        else {
-            System.out.println("Invalid value entered");
+        switch (selectedFunction) {
+            case "a":
+                groupConsole.menuGroupsByStudentCount(in);
+                break;
+            case "b":
+                studentConsole.menuStudentsByCourseName(in);
+                break;
+            case "c":
+                studentConsole.menuAddStudent(in);
+                break;
+            case "d":
+                studentConsole.menuDeleteStudent(in);
+                break;
+            case "e":
+                studentConsole.menuAddStudentToCourse(in);
+                break;
+            case "f":
+                studentConsole.menuDeleteStudentCourse(in);
+                break;
+            default:
+                System.out.println("Invalid value entered");
+                break;
         }
         printMainMenu();
     }

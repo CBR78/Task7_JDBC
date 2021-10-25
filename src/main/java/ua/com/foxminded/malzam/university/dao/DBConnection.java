@@ -16,7 +16,7 @@ public class DBConnection {
     public static Connection getInstance() {
         Connection connection = null;
         Properties props = null;
-        
+
         try (FileInputStream in = new FileInputStream(PATH_TO_PROPERTIES)) {
             props = new Properties();
             props.load(in);
@@ -25,6 +25,7 @@ public class DBConnection {
         }
 
         try {
+            assert props != null;
             String url = props.getProperty("jdbc.url");
             String username = props.getProperty("jdbc.username");
             String password = props.getProperty("jdbc.password");

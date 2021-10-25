@@ -9,11 +9,11 @@ import ua.com.foxminded.malzam.university.model.Group;
 import ua.com.foxminded.malzam.university.model.Student;
 import ua.com.foxminded.malzam.university.model.StudentCourses;
 
-public class DataTableGeneator {
+public class DataTableGenerator {
     private static final int SUM_STUDENTS = 200;
     private static final int SUM_GROUPS = 10;
     private static final int SUM_COURSES = 10;
-    private Random random = new Random();
+    private final Random random = new Random();
 
     public Set<Course> createCourses() {
         Set<Course> courses = new HashSet<>();
@@ -96,7 +96,7 @@ public class DataTableGeneator {
         return students;
     }
 
-    private Set<Student> setGroupsForStudents(Set<Student> students) {
+    private void setGroupsForStudents(Set<Student> students) {
         int studentsWithoutGroups = SUM_STUDENTS;
         int groupId = 0;
         int studentsForGrouping = 0;
@@ -113,11 +113,10 @@ public class DataTableGeneator {
                 studentsForGrouping--;
             }
         }
-        return students;
     }
 
     public Set<StudentCourses> generateStudentsAndCourses() {
-        int sumCoursesForStudent = 0;
+        int sumCoursesForStudent;
         int courseId = 0;
         Set<StudentCourses> studentsAndCourses = new HashSet<>();
 
